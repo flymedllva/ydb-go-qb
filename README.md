@@ -16,12 +16,12 @@ go get -u github.com/flymedllva/ydb-go-qb
   * built on the latest version of [scany](http://github.com/georgysavva/scany)
 * [yqb](yqb) is a `query builder` that supports data types for working with the [YDB](https://github.com/ydb-platform/ydb-go-sdk)
   * it's a fork of [squirrel](https://github.com/Masterminds/squirrel) with additional functionality specifically for [YDB](https://github.com/ydb-platform/ydb-go-sdk)
-* [yqr](yqr) this is `query runner` connecting [yqb](yqb) & [yscan](yscan) into a convenient API for work with [YDB](https://github.com/ydb-platform/ydb-go-sdk)
+* [yqe](yqe) this is `query executor` connecting [yqb](yqb) & [yscan](yscan) into a convenient API for work with [YDB](https://github.com/ydb-platform/ydb-go-sdk)
 * [ysg](ysg) this is `schema generator` connects to YDB, collects circuit information by specified parameters, generates auxiliary go code
 
 ## Example
 
-### `yqb & yscan & yqr`
+### `yqb & yscan & yqe`
 
 connect using a native API to the [YDB](https://github.com/ydb-platform/ydb-go-sdk)
 ```go
@@ -50,15 +50,16 @@ queryErr := db.Table().Do(ctx, func(ctx context.Context, s table.Session) (err e
         "AddTimezone(CurrentUtcDatetime(), \"Europe/Moscow\") as time",
         "Json(\"{\\\"1\\\": \\\"2\\\"}\") as json",
     )
-    
+
+	// default
     txc := table.DefaultTxControl()
-    tx, err := yqr.ViaSession(txc, s).Get(ctx, &as, query)
+    tx, err := yqe.UseSession(s).WithTxControl(txc).Get(ctx, &as, query)
     if err != nil {
         return err
     }
     log.Printf("use tx.Rollback or tx.CommitTx if needs from %v\n", tx)
 	// or (if txc not commit)
-    // r, err := yqr.ViaTransaction(tx).Exec(ctx, yqb.Select("1 as test"))
+    // tx, r, err := yqe.UseTransaction(tx).Exec(ctx, yqb.Select("1 as test"))
     // if err != nil {
     // return err
     // }

@@ -1,4 +1,4 @@
-package yqr
+package yqe
 
 import "github.com/flymedllva/ydb-go-qb/yscan"
 
