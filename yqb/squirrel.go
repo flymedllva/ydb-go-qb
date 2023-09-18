@@ -301,7 +301,11 @@ func castArgToYdb(arg any) ([]types.Value, error) {
 		}, nil
 	case time.Time:
 		return []types.Value{
-			types.DatetimeValueFromTime(t),
+			types.TimestampValueFromTime(t),
+		}, nil
+	case *time.Time:
+		return []types.Value{
+			types.NullableTimestampValueFromTime(t),
 		}, nil
 	default:
 		return nil, fmt.Errorf("unsupported type `%T`", arg)
