@@ -2,6 +2,7 @@ package yqb
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -306,6 +307,14 @@ func castArgToYdb(arg any) ([]types.Value, error) {
 	case *time.Time:
 		return []types.Value{
 			types.NullableTimestampValueFromTime(t),
+		}, nil
+	case json.RawMessage:
+		return []types.Value{
+			types.JSONValueFromBytes(t),
+		}, nil
+	case *json.RawMessage:
+		return []types.Value{
+			types.NullableJSONValueFromBytes((*[]byte)(t)),
 		}, nil
 	default:
 		return nil, fmt.Errorf("unsupported type `%T`", arg)
