@@ -309,12 +309,13 @@ func castArgToYdb(arg any) ([]types.Value, error) {
 			types.NullableTimestampValueFromTime(t),
 		}, nil
 	case json.RawMessage:
+		if t == nil {
+			return []types.Value{
+				types.NullableJSONValueFromBytes(nil),
+			}, nil
+		}
 		return []types.Value{
 			types.JSONValueFromBytes(t),
-		}, nil
-	case *json.RawMessage:
-		return []types.Value{
-			types.NullableJSONValueFromBytes((*[]byte)(t)),
 		}, nil
 	default:
 		return nil, fmt.Errorf("unsupported type `%T`", arg)
