@@ -343,8 +343,8 @@ func (b SelectBuilder) FromSelect(from SelectBuilder, alias string) SelectBuilde
 	return builder.Set(b, "From", Alias(from, alias)).(SelectBuilder)
 }
 
-// Index sets the VIEW clause of the query.
-func (b SelectBuilder) Index(view string) SelectBuilder {
+// View sets the VIEW clause of the query.
+func (b SelectBuilder) View(view string) SelectBuilder {
 	return builder.Set(b, "Index", newPart(view)).(SelectBuilder)
 }
 

@@ -27,7 +27,7 @@ func TestSelectBuilderToSql(t *testing.T) {
 		Column(Alias(Eq{"c": listArg}, "c_alias")).
 		Column(Alias(subQ, "subq")).
 		From("e").
-		Index("nameIndex").
+		View("nameIndex").
 		With(Eq{"FORCE_INFER_SCHEMA": 42}).
 		FlattenOptional("name").
 		JoinClause("CROSS JOIN j1").
